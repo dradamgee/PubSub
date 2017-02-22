@@ -1,0 +1,29 @@
+﻿<Window x:Class="UserInterface.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UserInterface"
+        xmlns:domainModel="clr-namespace:DomainModel;assembly=DomainModel"
+        xmlns:ui="clr-namespace:UI;assembly=DomainModel"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type ui:MarketPlacementViewModel}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="ID : "></TextBlock>
+                <TextBox Text="{Binding ID, Mode=OneWay}"></TextBox>
+                <TextBlock Text="Quantity : "></TextBlock>
+                <TextBox Text="{Binding Quantity, Mode=OneWay}"></TextBox>
+                <TextBlock Text="Filled : "></TextBlock>
+                <TextBox Text="{Binding Filled, Mode=OneWay}"></TextBox>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+    <ScrollViewer >
+        <ItemsControl ItemsSource="{Binding MarketPlacements}">
+        </ItemsControl>
+    </ScrollViewer>
+    
+    
+</Window>
