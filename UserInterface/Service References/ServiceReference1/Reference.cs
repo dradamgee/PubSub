@@ -12,7 +12,7 @@ namespace UserInterface.ServiceReference1 {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReference1.IPublisherService")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReference1.IPublisherService", CallbackContract=typeof(UserInterface.ServiceReference1.IPublisherServiceCallback))]
     public interface IPublisherService {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IPublisherService/SubscribeToMarketPlacements")]
@@ -23,30 +23,38 @@ namespace UserInterface.ServiceReference1 {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IPublisherServiceCallback {
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IPublisherService/OnNext")]
+        void OnNext(string dataChangedArgs);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IPublisherServiceChannel : UserInterface.ServiceReference1.IPublisherService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class PublisherServiceClient : System.ServiceModel.ClientBase<UserInterface.ServiceReference1.IPublisherService>, UserInterface.ServiceReference1.IPublisherService {
+    public partial class PublisherServiceClient : System.ServiceModel.DuplexClientBase<UserInterface.ServiceReference1.IPublisherService>, UserInterface.ServiceReference1.IPublisherService {
         
-        public PublisherServiceClient() {
+        public PublisherServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
+                base(callbackInstance) {
         }
         
-        public PublisherServiceClient(string endpointConfigurationName) : 
-                base(endpointConfigurationName) {
+        public PublisherServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+                base(callbackInstance, endpointConfigurationName) {
         }
         
-        public PublisherServiceClient(string endpointConfigurationName, string remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public PublisherServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public PublisherServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(endpointConfigurationName, remoteAddress) {
+        public PublisherServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public PublisherServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(binding, remoteAddress) {
+        public PublisherServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(callbackInstance, binding, remoteAddress) {
         }
         
         public void SubscribeToMarketPlacements(int deskId) {

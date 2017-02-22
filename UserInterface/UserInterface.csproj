@@ -120,11 +120,11 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="Service References\ServiceReference1\Service1.wsdl" />
-    <None Include="Service References\ServiceReference1\Service1.xsd">
+    <None Include="Service References\ServiceReference1\service.wsdl" />
+    <None Include="Service References\ServiceReference1\service.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ServiceReference1\Service11.xsd">
+    <None Include="Service References\ServiceReference1\service1.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
@@ -136,15 +136,16 @@
       <Project>{738476C7-8837-496B-B0FF-8B7CFE76087A}</Project>
       <Name>DomainModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ThirdTime\ThirdTime.csproj">
+      <Project>{2700499d-9929-40d1-a086-7b83b6f5b5e3}</Project>
+      <Name>ThirdTime</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\ServiceReference1\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\ServiceReference1\Service1.disco" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\ServiceReference1\configuration91.svcinfo" />

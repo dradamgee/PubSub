@@ -1,20 +1,48 @@
-﻿using System;
+﻿using DomainModel;
+using Simulator;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.ServiceModel.Web;
 using System.Text;
-using DomainModel;
-using Simulator;
 
-namespace DataPublisher {
+namespace ThirdTime
+{
+    public class Returner : IObserver<ServiceInterface.DataChange<int, MarketPlacement>>
+    {
+        private Returner callback;
+        private IClientSubscriber callback1;
+
+        public Returner(IClientSubscriber callback1)
+        {
+            this.callback1 = callback1;
+        }
+
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnNext(ServiceInterface.DataChange<int, MarketPlacement> value)
+        {
+            callback1.OnNext(value.ToString());
+        }
+    }
+
     //[ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
-    public class Service1 : IPublisherService/*, IObserver<ServiceInterface.DataChange<int, MarketPlacement>>, IObserver<ServiceInterface.DataChange<int, FillExecution>> */{
+    public class PublisherService : IPublisherService
+
+    {
         private MockMarketPlacementProvider mockMarketPlacementProvider;
 
 
-        public Service1()
+        public PublisherService()
         {
             mockMarketPlacementProvider = new MockMarketPlacementProvider(1);
             mockMarketPlacementProvider.MockUpSomeStuff(66, 100);
@@ -31,7 +59,10 @@ namespace DataPublisher {
 
         public void SubscribeToMarketPlacements(int deskId)
         {
-            //((IObservable<ServiceInterface.DataChange<int, MarketPlacement>>) mockMarketPlacementProvider).Subscribe(this);
+
+            Returner returner = new Returner(Callback);
+
+            ((IObservable<ServiceInterface.DataChange<int, MarketPlacement>>) mockMarketPlacementProvider).Subscribe(returner);
         }
 
         public void SubscribeToFillExecutions(int placementId)
@@ -44,7 +75,8 @@ namespace DataPublisher {
             Callback.OnNext(value.ToString());
         }
 
-        public void OnNext(ServiceInterface.DataChange<int, FillExecution> value) {
+        public void OnNext(ServiceInterface.DataChange<int, FillExecution> value)
+        {
             Callback.OnNext(value.ToString());
         }
 
