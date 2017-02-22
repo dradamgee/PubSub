@@ -78,7 +78,7 @@ type MockMarketPlacementProvider(fillRate: float) =
             let action() : unit = placementActor.Unsubscribe(observer) |> ignore
 
             new DisposibleAction(Action(action)) :> IDisposable                
-   
+       
     member this.MockUpSomeStuff(deskId: int, count: int) =
         id = createPlacements deskId  id count
         

@@ -10,10 +10,13 @@ type DataChange<'key, 'data> (key: 'key, data: 'data, dataChangeType: DataChange
     member this.Data = data
     member this.DataChangeType = dataChangeType
 
-type SubscriptionFilter(deskID: int) = 
+type DeskFilter(deskID: int) = 
     member this.deskID = deskID
 
+type PlacementFilter(placementId: int) = 
+    member this.PlacementId = placementId
+
 type DataPublisher =     
-    abstract member SubscribeToMarketPlacements: SubscriptionFilter -> IObservable<DataChange<int, MarketPlacement>>
-    abstract member SubscribeToFills: SubscriptionFilter -> IObservable<DataChange<int, MarketPlacement>>
+    abstract member SubscribeToMarketPlacements: DeskFilter -> IObservable<DataChange<int, MarketPlacement>>
+    abstract member SubscribeToFillExecutions: PlacementFilter -> IObservable<DataChange<int, FillExecution>>
 

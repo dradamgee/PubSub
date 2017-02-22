@@ -3,7 +3,7 @@
 open System.Timers
 open System
 open System.Collections.Generic
-
+open System.Runtime.Serialization
 
 type FillExecution(id: int, quantity: decimal) = 
     member this.PlacementID = id
