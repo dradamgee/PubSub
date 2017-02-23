@@ -26,7 +26,7 @@ namespace UserInterface.ServiceReference1 {
     public interface IPublisherServiceCallback {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IPublisherService/OnNext")]
-        void OnNext(string dataChangedArgs);
+        void OnNext(int key, System.Tuple<int, int, decimal, decimal> data, Notifications.DataChangeType type);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

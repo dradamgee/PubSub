@@ -9,12 +9,11 @@ using System.Text;
 
 namespace ThirdTime
 {
-    public class Returner : IObserver<ServiceInterface.DataChange<int, MarketPlacement>>
+    public class CallbackObserver : IObserver<Notifications.DataChange<int, MarketPlacement>>
     {
-        private Returner callback;
-        private IClientSubscriber callback1;
+        private readonly IClientSubscriber callback1;
 
-        public Returner(IClientSubscriber callback1)
+        public CallbackObserver(IClientSubscriber callback1)
         {
             this.callback1 = callback1;
         }
@@ -29,9 +28,9 @@ namespace ThirdTime
             throw new NotImplementedException();
         }
 
-        public void OnNext(ServiceInterface.DataChange<int, MarketPlacement> value)
+        public void OnNext(Notifications.DataChange<int, MarketPlacement> value)
         {
-            callback1.OnNext(value.ToString());
+            callback1.OnNext(value.Key, Serializer.Serialize(value.Data), value.DataChangeType);
         }
     }
 
@@ -59,35 +58,8 @@ namespace ThirdTime
 
         public void SubscribeToMarketPlacements(int deskId)
         {
-
-            Returner returner = new Returner(Callback);
-
-            ((IObservable<ServiceInterface.DataChange<int, MarketPlacement>>) mockMarketPlacementProvider).Subscribe(returner);
-        }
-
-        public void SubscribeToFillExecutions(int placementId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnNext(ServiceInterface.DataChange<int, MarketPlacement> value)
-        {
-            Callback.OnNext(value.ToString());
-        }
-
-        public void OnNext(ServiceInterface.DataChange<int, FillExecution> value)
-        {
-            Callback.OnNext(value.ToString());
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
+            CallbackObserver callbackObserver = new CallbackObserver(Callback);
+            ((IObservable<Notifications.DataChange<int, MarketPlacement>>) mockMarketPlacementProvider).Subscribe(callbackObserver);
         }
     }
 }

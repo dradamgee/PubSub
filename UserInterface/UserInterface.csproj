@@ -127,6 +127,12 @@
     <None Include="Service References\ServiceReference1\service1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\ServiceReference1\service2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\ServiceReference1\System.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -135,10 +141,6 @@
     <ProjectReference Include="..\DomainModel\DomainModel.fsproj">
       <Project>{738476C7-8837-496B-B0FF-8B7CFE76087A}</Project>
       <Name>DomainModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ThirdTime\ThirdTime.csproj">
-      <Project>{2700499d-9929-40d1-a086-7b83b6f5b5e3}</Project>
-      <Name>ThirdTime</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -5,7 +5,7 @@ open System
 open System.Collections.Generic
 open System.Diagnostics
 open DomainModel
-open ServiceInterface
+open Notifications
     
 type MarketPlacementActorMessage =
     | SubscribeMessage of IObserver<DataChange<int, MarketPlacement>>

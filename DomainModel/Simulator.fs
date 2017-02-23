@@ -5,7 +5,7 @@ open System
 open System.Collections.Generic
 open DomainModel
 open Service
-open ServiceInterface
+open Notifications
 
 type SellSideSimActions = 
     | OnNext of DataChange<int, MarketPlacement>

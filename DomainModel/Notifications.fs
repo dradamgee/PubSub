@@ -1,4 +1,4 @@
-﻿module ServiceInterface
+﻿module Notifications
 
 open System
 open DomainModel
@@ -17,6 +17,6 @@ type PlacementFilter(placementId: int) =
     member this.PlacementId = placementId
 
 type DataPublisher =     
-    abstract member SubscribeToMarketPlacements: DeskFilter -> IObservable<DataChange<int, MarketPlacement>>
-    abstract member SubscribeToFillExecutions: PlacementFilter -> IObservable<DataChange<int, FillExecution>>
+    abstract member Subscribe: DeskFilter -> IObserver<DataChange<int, MarketPlacement>> -> bool
+    
 

@@ -13,12 +13,12 @@ namespace ThirdTime
     {
         [OperationContract(IsOneWay = true)]
         void SubscribeToMarketPlacements(int deskId);
-        void SubscribeToFillExecutions(int placementId);
+        
     }
 
     public interface IClientSubscriber
     {
         [OperationContract(IsOneWay = true)]
-        void OnNext(string dataChangedArgs);
+        void OnNext(int key, Tuple<int,int, decimal, decimal> data, Notifications.DataChangeType type);
     }
 }

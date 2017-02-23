@@ -6,7 +6,8 @@ open System.Collections.ObjectModel
 open System.ComponentModel
 open DomainModel
 open Service
-open ServiceInterface
+open Notifications
+open System.Windows
 
 
 type MarketPlacementViewModel(initialValue: MarketPlacement) =
@@ -35,11 +36,12 @@ type MarketPlacementViewModel(initialValue: MarketPlacement) =
 type MainWindowDataContextActions = 
     | OnNext of DataChange<int, MarketPlacement>
 
+open System.Windows    
 
-type MainWindowDataContext(dataSource: IObservable<DataChange<int, MarketPlacement>> ) as self =     
+type MainWindowDataContext (dispatcher: System.Windows.Threading.Dispatcher) =     
     let data = ObservableCollection<MarketPlacementViewModel>()
     let ViewModels = Dictionary<int, MarketPlacementViewModel>()
-
+    
     let messageProcessor = MailboxProcessor.Start(fun inbox ->
         let rec loop() = 
             async {
@@ -48,19 +50,18 @@ type MainWindowDataContext(dataSource: IObservable<DataChange<int, MarketPlaceme
                 match msg with
                     | MainWindowDataContextActions.OnNext value ->
                         match ViewModels.TryGetValue(value.Key) with
-                        | true, vm -> vm.UpdateFrom(value.Data)
+                        | true, vm -> dispatcher.Invoke(fun () -> vm.UpdateFrom(value.Data))
                         | false, _ -> 
                             let newVm = MarketPlacementViewModel(value.Data)
                             ViewModels.Add(value.Key, newVm)
-                            data.Add(newVm)
+                            dispatcher.Invoke(fun () -> data.Add(newVm))
                 do! loop()
             }
         loop()        
     )
-        
-    do dataSource.Subscribe(self) |> ignore
     
     member this.MarketPlacements = data
+
     interface IObserver<DataChange<int, MarketPlacement>> with 
         member this.OnNext(value: DataChange<int, MarketPlacement>) =                                                
             messageProcessor.Post(OnNext(value))
