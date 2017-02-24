@@ -83,6 +83,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="WcfDataPublisher.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -138,6 +139,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Client\Client.fsproj">
+      <Project>{ac99ba42-bc9a-4386-bef3-a906ade38152}</Project>
+      <Name>Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DomainModel\DomainModel.fsproj">
       <Project>{738476C7-8837-496B-B0FF-8B7CFE76087A}</Project>
       <Name>DomainModel</Name>

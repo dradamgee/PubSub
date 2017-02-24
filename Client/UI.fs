@@ -8,7 +8,7 @@ open DomainModel
 open Service
 open Notifications
 open System.Windows
-
+open System.Diagnostics
 
 type MarketPlacementViewModel(initialValue: MarketPlacement) =
     let mutable model = initialValue
@@ -36,7 +36,7 @@ type MarketPlacementViewModel(initialValue: MarketPlacement) =
 type MainWindowDataContextActions = 
     | OnNext of DataChange<int, MarketPlacement>
 
-open System.Windows    
+
 
 type MainWindowDataContext (dispatcher: System.Windows.Threading.Dispatcher) =     
     let data = ObservableCollection<MarketPlacementViewModel>()
@@ -46,7 +46,7 @@ type MainWindowDataContext (dispatcher: System.Windows.Threading.Dispatcher) =
         let rec loop() = 
             async {
                 let! msg = inbox.Receive()                
-
+                if inbox.CurrentQueueLength > 1000 then Debug.WriteLine("MainWindowDataContext")
                 match msg with
                     | MainWindowDataContextActions.OnNext value ->
                         match ViewModels.TryGetValue(value.Key) with

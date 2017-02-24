@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UserInterface"
         xmlns:domainModel="clr-namespace:DomainModel;assembly=DomainModel"
-        xmlns:ui="clr-namespace:UI;assembly=DomainModel"
+        xmlns:ui="clr-namespace:UI;assembly=Client"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Window.Resources>

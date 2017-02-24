@@ -21,6 +21,7 @@ type MarketPlacementActor() =
         let rec loop() = 
             async { 
                 let! msg = inbox.Receive()
+                if inbox.CurrentQueueLength > 1000 then Debug.WriteLine("MarketPlacementActor " + inbox.CurrentQueueLength.ToString())
                 match msg with
                 | SubscribeMessage sub -> 
                     do subscribers.Add(sub) |> ignore

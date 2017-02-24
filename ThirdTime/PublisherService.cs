@@ -1,11 +1,8 @@
-﻿using DomainModel;
-using Simulator;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
+﻿using System;
 using System.ServiceModel;
-using System.Text;
+using DomainModel;
+using Simulator;
+using ThirdTime;
 
 namespace ThirdTime
 {
@@ -30,13 +27,13 @@ namespace ThirdTime
 
         public void OnNext(Notifications.DataChange<int, MarketPlacement> value)
         {
+            //TODO here we are blocking the notification until the message is sent, need to implement mailbox
             callback1.OnNext(value.Key, Serializer.Serialize(value.Data), value.DataChangeType);
         }
     }
 
     //[ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Reentrant)]
     public class PublisherService : IPublisherService
-
     {
         private MockMarketPlacementProvider mockMarketPlacementProvider;
 

@@ -8,6 +8,7 @@ open DomainModel
 //    member this.Quantity = quantity
 //    member this.Filled = filled
 
+  
 
 let Serialize (marketPlacement: MarketPlacement) = 
     (

@@ -6,6 +6,7 @@ open System.Collections.Generic
 open DomainModel
 open Service
 open Notifications
+open System.Diagnostics
 
 type SellSideSimActions = 
     | OnNext of DataChange<int, MarketPlacement>
@@ -19,7 +20,8 @@ type SellSideSim(marketPlacementActor: MarketPlacementActor) as self =
     let messageProcessor = MailboxProcessor.Start(fun inbox ->
         let rec loop() = 
             async { 
-                let! msg = inbox.Receive()
+                let! msg = inbox.Receive()                                
+                if inbox.CurrentQueueLength > 1000 then Debug.WriteLine("SellSideSim")
                 match msg with
                 | OnNext value ->
                     match value.DataChangeType with
