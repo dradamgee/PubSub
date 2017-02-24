@@ -2,10 +2,8 @@
 using System.ServiceModel;
 using DomainModel;
 using Simulator;
-using ThirdTime;
 
-namespace ThirdTime
-{
+namespace PublisherService {
     public class CallbackObserver : IObserver<Notifications.DataChange<int, MarketPlacement>>
     {
         private readonly IClientSubscriber callback1;

@@ -6,7 +6,9 @@ open PublisherService
 
 [<EntryPoint>]
 let main argv = 
-    use serviceHost = ServiceHost(typedefof<PublisherService.PublisherService>)
+
+    let serviceType = typedefof<PublisherService.PublisherService>
+    use serviceHost = new ServiceHost(serviceType)
     serviceHost.Open()
     printfn "service started"
     System.Console.In.ReadLine() |> ignore

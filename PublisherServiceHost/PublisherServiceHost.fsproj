@@ -58,9 +58,9 @@
       <Project>{738476c7-8837-496b-b0ff-8b7cfe76087a}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\PublisherService\PublisherService.fsproj">
-      <Name>PublisherService</Name>
-      <Project>{bdbcdc50-eeba-496f-b0b7-5e8ff9cd2402}</Project>
+    <ProjectReference Include="..\ThirdTime\ThirdTime.csproj">
+      <Name>ThirdTime</Name>
+      <Project>{2700499d-9929-40d1-a086-7b83b6f5b5e3}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

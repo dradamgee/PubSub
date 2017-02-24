@@ -8,7 +8,7 @@ open Simulator
 
 type IClientSubscriber =
     [<OperationContract(IsOneWay = true)>]
-    abstract member OnNext: int -> (int * int * decimal * decimal) -> DataChangeType -> unit
+    abstract member OnNext: key : int -> data : (int * int * decimal * decimal) -> dataChangeType : DataChangeType -> unit
     
 [<ServiceContract(CallbackContract = typedefof<IClientSubscriber>)>]
 type IPublisherService = 
