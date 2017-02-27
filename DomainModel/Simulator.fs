@@ -20,8 +20,8 @@ type SellSideSim(marketPlacementActor: MarketPlacementActor) as self =
     let messageProcessor = MailboxProcessor.Start(fun inbox ->
         let rec loop() = 
             async { 
-                let! msg = inbox.Receive()                                
-                if inbox.CurrentQueueLength > 1000 then Debug.WriteLine("SellSideSim")
+                let! msg = inbox.Receive()                                                
+                if inbox.CurrentQueueLength > 1000 then Debug.WriteLine("SellSideSim " + inbox.CurrentQueueLength.ToString())
                 match msg with
                 | OnNext value ->
                     match value.DataChangeType with

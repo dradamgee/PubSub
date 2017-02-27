@@ -63,11 +63,6 @@
       <Project>{bdbcdc50-eeba-496f-b0b7-5e8ff9cd2402}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\ThirdTime\ThirdTime.csproj">
-      <Name>ThirdTime</Name>
-      <Project>{2700499d-9929-40d1-a086-7b83b6f5b5e3}</Project>
-      <Private>True</Private>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>

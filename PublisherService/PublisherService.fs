@@ -6,28 +6,39 @@ open Notifications
 open DomainModel
 open Simulator
 open Service
+open System.Diagnostics
+
+[<Interface>]
+type IClientSubscriber =
+    [<OperationContract(IsOneWay = true)>] // TODO is this line needed?
+    abstract member OnNext : data:((int * int * decimal * decimal) * DataChangeType) [] -> unit
+
+[<Interface>]
+[<ServiceContract(CallbackContract = typedefof<IClientSubscriber>)>] 
+type IPublisherService = 
+    [<OperationContract(IsOneWay = true)>]
+    abstract member SubscribeToMarketPlacements: deskId: int -> unit
 
 type SendNotificationMessage = 
     | DataChanged of Notifications.DataChange<int, MarketPlacement>
 
 type NotificationSender(clientSubscriber: IClientSubscriber) =    
     
-    
-
     let messageProcessor = MailboxProcessor.Start(fun inbox ->
         
         let sendThese = ResizeArray<(int * int * decimal * decimal) * DataChangeType>()
 
         let rec loop() = 
             async {        
-                let! msg = inbox.Receive()
-                
+                let! msg = inbox.Receive()                
+                if inbox.CurrentQueueLength > 1000 then Debug.WriteLine("NotificationSender " + inbox.CurrentQueueLength.ToString())
+
                 match msg with
                     | DataChanged dc ->
                         let serialisedMessage = Serializer.Serialize(dc.Data)
                         sendThese.Add(serialisedMessage, dc.DataChangeType)
                 
-                if sendThese.Count > 0 || inbox.CurrentQueueLength = 0 then
+                if sendThese.Count > 50 || inbox.CurrentQueueLength = 0 then
                     clientSubscriber.OnNext(sendThese.ToArray()) |> ignore
                     sendThese.Clear()
                 
