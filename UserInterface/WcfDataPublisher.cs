@@ -12,10 +12,16 @@ namespace UserInterface
             _observer = observer;
         }
 
-        public void OnNext(int key, Tuple<int, int, decimal, decimal> dataChangedArgs, Notifications.DataChangeType type) {
-            var mp = new MarketPlacement(dataChangedArgs.Item1, dataChangedArgs.Item2, dataChangedArgs.Item3, dataChangedArgs.Item4);
-            var dataChange = new Notifications.DataChange<int, MarketPlacement>(key, mp, type);
-            _observer.OnNext(dataChange);
+        public void OnNext(Tuple<int, int, decimal, decimal>[] dataChangedArgs, Notifications.DataChangeType type) {
+
+            foreach (var dataChangedArg in dataChangedArgs)
+            {
+                var mp = new MarketPlacement(dataChangedArg.Item1, dataChangedArg.Item2, dataChangedArg.Item3, dataChangedArg.Item4);
+                var dataChange = new Notifications.DataChange<int, MarketPlacement>(mp.ID, mp, type);
+                _observer.OnNext(dataChange);
+            }
+
+            
         }
     }
 

@@ -18,6 +18,6 @@ namespace PublisherService {
     public interface IClientSubscriber
     {
         [OperationContract(IsOneWay = true)]
-        void OnNext(int key, Tuple<int,int, decimal, decimal> data, Notifications.DataChangeType dataChangeType);
+        void OnNext(Tuple<int,int, decimal, decimal>[] data, Notifications.DataChangeType dataChangeType);
     }
 }

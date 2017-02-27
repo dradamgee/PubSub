@@ -6,15 +6,6 @@ open Notifications
 open DomainModel
 open Simulator
 
-type IClientSubscriber =
-    [<OperationContract(IsOneWay = true)>]
-    abstract member OnNext: key : int -> data : (int * int * decimal * decimal) -> dataChangeType : DataChangeType -> unit
-    
-[<ServiceContract(CallbackContract = typedefof<IClientSubscriber>)>]
-type IPublisherService = 
-    [<OperationContract(IsOneWay = true)>]
-    abstract member SubscribeToMarketPlacements: int -> unit
-
 type CallbackObserver(clientSubscriber: IClientSubscriber) =    
     
     interface IObserver<Notifications.DataChange<int, MarketPlacement>> with
@@ -24,7 +15,7 @@ type CallbackObserver(clientSubscriber: IClientSubscriber) =
             let key = dc.Key
             let serializedData = Serializer.Serialize(dc.Data)
             let dataChangeType = dc.DataChangeType            
-            clientSubscriber.OnNext key serializedData dataChangeType |> ignore
+            clientSubscriber.OnNext([|serializedData|], dataChangeType) |> ignore
 
 type PublisherService() = 
     let mmpp = MockMarketPlacementProvider(1.0)
