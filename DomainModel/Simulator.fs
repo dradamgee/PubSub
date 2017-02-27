@@ -15,7 +15,7 @@ type SellSideSimActions =
 type SellSideSim(marketPlacementActor: MarketPlacementActor) as self =
     let placements = Dictionary<int, MarketPlacement>()
     let random = Random()
-    do marketPlacementActor.Subscribe(SubscribeMessage self)
+    do marketPlacementActor.Subscribe(self)
 
     let messageProcessor = MailboxProcessor.Start(fun inbox ->
         let rec loop() = 
@@ -31,8 +31,7 @@ type SellSideSim(marketPlacementActor: MarketPlacementActor) as self =
                         do placements.[value.Key] <- value.Data
                 | Tick ->                         
                     for placement in placements.Values do
-                        FillExecution(placement.ID, decimal(random.Next 10))
-                        |> FillMessage
+                        FillExecution(placement.ID, decimal(random.Next 10))                        
                         |> marketPlacementActor.ProcessFill
                 
                 do! loop()
@@ -62,7 +61,7 @@ type MockMarketPlacementProvider(fillRate: float) =
 
     let createPlacement(deskId: int, newId: int) =                
         let mp = MarketPlacement(newId, deskId, 1000m, 0m)
-        placementActor.Place(PlaceMessage(mp))
+        placementActor.Place(mp)
     
     let rec createPlacements desk startFrom number =        
         if number = 0 then startFrom
@@ -73,13 +72,8 @@ type MockMarketPlacementProvider(fillRate: float) =
     let sss = SellSideSim(placementActor)
     let timer = new Timer(fillRate)
     do timer.Elapsed.Add(fun _ -> sss.Tick())
-    interface IObservable<DataChange<int, MarketPlacement>> with        
-        member this.Subscribe(observer: IObserver<DataChange<int, MarketPlacement>>) =            
-            placementActor.Subscribe(SubscribeMessage(observer)) |> ignore
-
-            let action() : unit = placementActor.Unsubscribe(observer) |> ignore
-
-            new DisposibleAction(Action(action)) :> IDisposable                
+      
+    member this.PlacementActor with get() = placementActor
        
     member this.MockUpSomeStuff(deskId: int, count: int) =
         id = createPlacements deskId  id count

@@ -42,10 +42,10 @@ type MarketPlacementActor() =
         loop()
     )
 
-    member this.Subscribe(sub) = messageProcessor.Post(sub)
+    member this.Subscribe(sub) = messageProcessor.Post(SubscribeMessage(sub))
     member this.Unsubscribe(sub) = messageProcessor.Post(UnsubscribeMessage(sub))
-    member this.Place(placement) = messageProcessor.Post(placement)
-    member this.ProcessFill(fill) = messageProcessor.Post(fill)
+    member this.Place(placement) = messageProcessor.Post(PlaceMessage(placement))
+    member this.ProcessFill(fill) = messageProcessor.Post(FillMessage(fill))
 
         
 

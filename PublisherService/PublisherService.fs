@@ -5,6 +5,7 @@ open System.ServiceModel
 open Notifications
 open DomainModel
 open Simulator
+open Service
 
 type CallbackObserver(clientSubscriber: IClientSubscriber) =    
     
@@ -17,15 +18,14 @@ type CallbackObserver(clientSubscriber: IClientSubscriber) =
             let dataChangeType = dc.DataChangeType            
             clientSubscriber.OnNext([|serializedData|], dataChangeType) |> ignore
 
-type PublisherService() = 
-    let mmpp = MockMarketPlacementProvider(1.0)
-    do mmpp.MockUpSomeStuff(66, 100) |> ignore
-    do mmpp.StartFilling()
+[<ServiceBehavior(InstanceContextMode  = InstanceContextMode.Single)>]
+type PublisherService(marketPlacementActor: MarketPlacementActor) = 
+    
     
     let callback() = OperationContext.Current.GetCallbackChannel<IClientSubscriber>()
 
     interface IPublisherService with
         member this.SubscribeToMarketPlacements(deskId: int) = 
             let callbackObserver = CallbackObserver(callback())
-            do (mmpp :> IObservable<Notifications.DataChange<int, MarketPlacement>>).Subscribe(callbackObserver) |> ignore
+            do marketPlacementActor.Subscribe(callbackObserver) |> ignore
                 
