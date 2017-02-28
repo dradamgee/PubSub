@@ -55,11 +55,11 @@ type NotificationSender(clientSubscriber: IClientSubscriber) =
     
 
 [<ServiceBehavior(InstanceContextMode  = InstanceContextMode.Single)>]
-type PublisherService(marketPlacementActor: MarketPlacementActor) = 
+type PublisherService(MarketPlacementSupervisor: MarketPlacementSupervisor) = 
     let callback() = OperationContext.Current.GetCallbackChannel<IClientSubscriber>()
 
     interface IPublisherService with
         member this.SubscribeToMarketPlacements(deskId: int) = 
             let callbackObserver = NotificationSender(callback())
-            do marketPlacementActor.Subscribe(callbackObserver) |> ignore
+            do MarketPlacementSupervisor.Subscribe(callbackObserver) |> ignore
                 

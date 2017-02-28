@@ -12,12 +12,12 @@ type SellSideSimActions =
     | OnNext of DataChange<int, MarketPlacement>
     | Tick    
 
-type SellSideSim(marketPlacementActor: MarketPlacementActor) as self =
+type SellSideSim(MarketPlacementSupervisor: MarketPlacementSupervisor) as self =
     
 
     let placements = Dictionary<int, MarketPlacement>()
     let random = Random()
-    do marketPlacementActor.Subscribe(self)
+    do MarketPlacementSupervisor.Subscribe(self)
 
     let messageProcessor = MailboxProcessor.Start(fun inbox ->
         let rec loop() = 
@@ -36,7 +36,7 @@ type SellSideSim(marketPlacementActor: MarketPlacementActor) as self =
                 | Tick ->                         
                     for placement in placements.Values do
                         FillExecution(placement.ID, decimal(random.Next 10))                        
-                        |> marketPlacementActor.ProcessFill
+                        |> MarketPlacementSupervisor.ProcessFill
                 
                 do! loop()
               }     
@@ -61,7 +61,7 @@ type DisposibleAction(action : Action) =
 
 type MockMarketPlacementProvider(fillRate: float) = 
     let mutable id = 0
-    let placementActor = MarketPlacementActor()    
+    let placementActor = MarketPlacementSupervisor()    
 
     let createPlacement(deskId: int, newId: int) =                
         let mp = MarketPlacement(newId, deskId, 1000m, 0m)
