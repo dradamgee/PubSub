@@ -59,6 +59,8 @@ type MarketPlacementActor(_placement: MarketPlacement) =
 type MarketPlacementSupervisor() =
     let subscribers = new HashSet<IObserver<DataChange<int, MarketPlacement>>>()
     let placementActors = new System.Collections.Generic.Dictionary<int, MarketPlacementActor>()
+    let fillSubscribers = new HashSet<IObserver<FillExecution>>()
+    let fills = new ResizeArray<FillExecution>()
     
     let messageProcessor = MailboxProcessor.Start(fun inbox ->
         let rec loop() = 
@@ -71,6 +73,11 @@ type MarketPlacementSupervisor() =
                     subscribers.Add(sub) |> ignore
                 | MarketPlacementUnsubscribeMessage sub -> 
                     for placementActor in placementActors.Values do placementActor.Unsubscribe(sub)                    
+                | FillExecutionSubscribeMessage sub ->                    
+                    fillSubscribers.Add(sub) |> ignore
+                    for fill in fills do sub.OnNext(fill)
+                | FillExecutionUnsubscribeMessage sub ->                    
+                    fillSubscribers.Remove(sub) |> ignore                    
                 | PlaceMessage mp ->                    
                     let mpa = new MarketPlacementActor(mp)
                     placementActors.Add(mp.ID, mpa)
@@ -78,7 +85,7 @@ type MarketPlacementSupervisor() =
                 | FillMessage fill ->                      
                     let placementActor = placementActors.[fill.PlacementID]
                     do placementActor.ProcessFill(fill)
-                    
+                    for sub in fillSubscribers do sub.OnNext(fill)                    
                 do! loop()
             }
         loop()

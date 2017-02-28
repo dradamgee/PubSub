@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="4a0c885a-530a-4fb5-8654-34a539086eaf" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:8733/Design_Time_Addresses/ThirdTime/MarketPlacementPublisherService/" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="239af78b-27fe-465d-8947-36ea329f36f4" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/ThirdTime/MarketPlacementPublisherService/?xsd=xsd2" />
+    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="2874a57b-ff1d-4aae-b639-4d511fed27de" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/ThirdTime/MarketPlacementPublisherService/?xsd=xsd3" />
+    <MetadataFile FileName="MarketPlacementPublisherService.wsdl" MetadataType="Wsdl" ID="54961b3c-77d6-4d00-9e5d-83ecf00dd517" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/ThirdTime/MarketPlacementPublisherService/?wsdl" />
+    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="f836f139-7f5b-4134-8846-bb52d45d78ae" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/ThirdTime/MarketPlacementPublisherService/?disco" />
+    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="030bfdfd-e566-4b92-90bd-a50adaa5baee" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/ThirdTime/MarketPlacementPublisherService/?xsd=xsd0" />
+    <MetadataFile FileName="item3.xsd" MetadataType="Schema" ID="81c63a36-dd0f-4ecb-a2e1-339e70f642c0" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/ThirdTime/MarketPlacementPublisherService/?xsd=xsd1" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

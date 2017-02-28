@@ -12,66 +12,49 @@ namespace UserInterface.ServiceReference1 {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReference1.IPublisherService", CallbackContract=typeof(UserInterface.ServiceReference1.IPublisherServiceCallback))]
-    public interface IPublisherService {
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReference1.IFillExecutionPublisherService", CallbackContract=typeof(UserInterface.ServiceReference1.IFillExecutionPublisherServiceCallback))]
+    public interface IFillExecutionPublisherService {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IPublisherService/SubscribeToMarketPlacements")]
-        void SubscribeToMarketPlacements(int deskId);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IPublisherService/SubscribeToMarketPlacements")]
-        System.Threading.Tasks.Task SubscribeToMarketPlacementsAsync(int deskId);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IPublisherService/SubscribeToFillExecutions")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFillExecutionPublisherService/SubscribeToFillExecutions")]
         void SubscribeToFillExecutions(int deskId);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IPublisherService/SubscribeToFillExecutions")]
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFillExecutionPublisherService/SubscribeToFillExecutions")]
         System.Threading.Tasks.Task SubscribeToFillExecutionsAsync(int deskId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IPublisherServiceCallback {
+    public interface IFillExecutionPublisherServiceCallback {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IPublisherService/OnNextExecution")]
-        void OnNextExecution(System.Tuple<int, decimal>[] data);
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IPublisherService/OnNextMarketPlacment")]
-        void OnNextMarketPlacment(System.Tuple<System.Tuple<int, int, decimal, decimal>, Notifications.DataChangeType>[] data);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFillExecutionPublisherService/OnNext")]
+        void OnNext(System.Tuple<int, decimal>[] data);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IPublisherServiceChannel : UserInterface.ServiceReference1.IPublisherService, System.ServiceModel.IClientChannel {
+    public interface IFillExecutionPublisherServiceChannel : UserInterface.ServiceReference1.IFillExecutionPublisherService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class PublisherServiceClient : System.ServiceModel.DuplexClientBase<UserInterface.ServiceReference1.IPublisherService>, UserInterface.ServiceReference1.IPublisherService {
+    public partial class FillExecutionPublisherServiceClient : System.ServiceModel.DuplexClientBase<UserInterface.ServiceReference1.IFillExecutionPublisherService>, UserInterface.ServiceReference1.IFillExecutionPublisherService {
         
-        public PublisherServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
+        public FillExecutionPublisherServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
                 base(callbackInstance) {
         }
         
-        public PublisherServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
+        public FillExecutionPublisherServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
                 base(callbackInstance, endpointConfigurationName) {
         }
         
-        public PublisherServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
+        public FillExecutionPublisherServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
                 base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public PublisherServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public FillExecutionPublisherServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, endpointConfigurationName, remoteAddress) {
         }
         
-        public PublisherServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public FillExecutionPublisherServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(callbackInstance, binding, remoteAddress) {
-        }
-        
-        public void SubscribeToMarketPlacements(int deskId) {
-            base.Channel.SubscribeToMarketPlacements(deskId);
-        }
-        
-        public System.Threading.Tasks.Task SubscribeToMarketPlacementsAsync(int deskId) {
-            return base.Channel.SubscribeToMarketPlacementsAsync(deskId);
         }
         
         public void SubscribeToFillExecutions(int deskId) {

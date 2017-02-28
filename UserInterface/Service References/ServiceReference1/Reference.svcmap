@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="7199440f-a7c6-4074-ae74-6b0a96f443d6" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="a671a923-53ab-469e-ad5a-edf6d469d00c" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -19,14 +19,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:8733/Design_Time_Addresses/ThirdTime/PublisherService/mex" Protocol="mex" SourceId="1" />
+    <MetadataSource Address="http://localhost:8733/Design_Time_Addresses/ThirdTime/FillExecutionPublisherService/" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="b351f550-5081-4ab4-8adf-24a9f992247e" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/ThirdTime/PublisherService/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="9ae0afa9-2cd0-4d1c-a0bf-60384777b874" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/ThirdTime/PublisherService/mex" />
-    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="2f832c61-0c36-4d4f-a390-0228fb0184a8" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/ThirdTime/PublisherService/mex" />
-    <MetadataFile FileName="System.xsd" MetadataType="Schema" ID="e6f5584a-1af3-4af6-811f-8f8ff0389450" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/ThirdTime/PublisherService/mex" />
-    <MetadataFile FileName="service2.xsd" MetadataType="Schema" ID="3d45a1da-cb59-4790-b848-dfb868c62ed6" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/ThirdTime/PublisherService/mex" />
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="7a4a8bd9-085d-456b-ab67-94c3becc1f74" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/ThirdTime/FillExecutionPublisherService/?xsd=xsd0" />
+    <MetadataFile FileName="FillExecutionPublisherService.wsdl" MetadataType="Wsdl" ID="666457ba-e5f8-4f4c-952b-2e0edba9c2bd" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/ThirdTime/FillExecutionPublisherService/?wsdl" />
+    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="4b83de1e-2cdd-4341-9033-31153c3df0e5" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/ThirdTime/FillExecutionPublisherService/?xsd=xsd2" />
+    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="c9658b50-53fb-4a8f-bed9-c943a4b088d7" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/ThirdTime/FillExecutionPublisherService/?xsd=xsd1" />
+    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="ae1376f8-aa2c-467b-98c4-1ca8fa1c3e54" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/ThirdTime/FillExecutionPublisherService/?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

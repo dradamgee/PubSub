@@ -2,23 +2,22 @@ using System;
 using System.ServiceModel;
 using DomainModel;
 using UserInterface.ServiceReference1;
+using UserInterface.ServiceReference2;
 
 namespace UserInterface
 {
-    public class MarketPlacementCallbackActor : IPublisherServiceCallback {
+    public class MarketPlacementCallbackActor : IMarketPlacementPublisherServiceCallback
+    {
         private readonly IObserver<Notifications.DataChange<int, MarketPlacement>> _marketPlacementObserver;
-        private readonly IObserver<FillExecution> _fillExecutionObserver;
 
-        public MarketPlacementCallbackActor(IObserver<Notifications.DataChange<int, MarketPlacement>> marketPlacementObserver,
-            IObserver<FillExecution> fillExecutionObserver) {
+        public MarketPlacementCallbackActor(IObserver<Notifications.DataChange<int, MarketPlacement>> marketPlacementObserver)
+        {
             _marketPlacementObserver = marketPlacementObserver;
-            _fillExecutionObserver = fillExecutionObserver;
         }
 
-        public void OnNextMarketPlacment(Tuple<Tuple<int, int, decimal, decimal>, Notifications.DataChangeType>[] messages) {
-
-            foreach (var message in messages)
-            {
+        public void OnNext(Tuple<Tuple<int, int, decimal, decimal>, Notifications.DataChangeType>[] data)
+        {
+            foreach (var message in data) {
                 var dataChangedArg = message.Item1;
                 var type = message.Item2;
 
@@ -27,51 +26,42 @@ namespace UserInterface
                 _marketPlacementObserver.OnNext(dataChange);
             }
         }
+    }
 
-        public void OnNextExecution(Tuple<int, decimal>[] messages)
+    public class FillExecutionCallbackActor : IFillExecutionPublisherServiceCallback {
+        private readonly IObserver<FillExecution> _fillExecutionObserver;
+
+        public FillExecutionCallbackActor(IObserver<FillExecution> fillExecutionObserver)
         {
-            foreach (var message in messages)
-            {
+            _fillExecutionObserver = fillExecutionObserver;
+        }
+
+        public void OnNext(Tuple<int, decimal>[] data)
+        {
+            foreach (var message in data) {
                 var fe = new FillExecution(message.Item1, message.Item2);
                 _fillExecutionObserver.OnNext(fe);
             }
         }
     }
 
-    //public class FillExecutionCallbackActor : IPublisherServiceCallback {
-    //    private readonly IObserver<FillExecution> _observer;
-
-    //    public FillExecutionCallbackActor(IObserver<FillExecution> observer) {
-    //        _observer = observer;
-    //    }
-
-    //    public void OnNext(Tuple<int, decimal>[] messages) {
-
-    //        foreach (var message in messages) {
-
-    //            var fe = new FillExecution(message.Item1, message.Item2);
-    //            _observer.OnNext(fe);
-    //        }
-    //    }
-    //}
-
     public class WcfDataPublisher : Notifications.DataPublisher
     {
         public bool SubscribeToPlacements(Notifications.DeskFilter filter, IObserver<Notifications.DataChange<int, MarketPlacement>> observer)
         {
-            MarketPlacementCallbackActor marketPlacementCallbackActor = new MarketPlacementCallbackActor(observer, null); // TODO think about splitting out the two methods.
-            InstanceContext context = new InstanceContext(marketPlacementCallbackActor);
-            var service = new PublisherServiceClient(context);
+            var callbackActor = new MarketPlacementCallbackActor(observer);
+            var context = new InstanceContext(callbackActor);
+            var service = new MarketPlacementPublisherServiceClient(context);
             service.SubscribeToMarketPlacements(filter.deskID); // TODO change the service contract to take a typed filter.
             return true;
         }
 
         public bool SubscribeToExecutions(Notifications.DeskFilter deskFilter, IObserver<FillExecution> observer)
         {
-            //MarketPlacementCallbackActor marketPlacementCallbackActor = new MarketPlacementCallbackActor(null, observer); // TODO think about splitting out the two methods.
-            //InstanceContext context = new InstanceContext(marketPlacementCallbackActor);
-            //var service = new PublisherServiceClient(context);
-            //service.SubscribeToFillExecutions(deskFilter.deskID); // TODO change the service contract to take a typed filter.
+            var callbackActor = new FillExecutionCallbackActor(observer);
+            var context = new InstanceContext(callbackActor);
+            var service = new FillExecutionPublisherServiceClient(context);
+            service.SubscribeToFillExecutions(deskFilter.deskID);
             return true;
         }
     }
