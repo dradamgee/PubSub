@@ -8,13 +8,17 @@ open Notifications
 open Diagnostics
     
 type MarketPlacementActorMessage =
-    | SubscribeMessage of IObserver<DataChange<int, MarketPlacement>>
-    | UnsubscribeMessage of IObserver<DataChange<int, MarketPlacement>>
+    | MarketPlacementSubscribeMessage of IObserver<DataChange<int, MarketPlacement>>
+    | MarketPlacementUnsubscribeMessage of IObserver<DataChange<int, MarketPlacement>>
+    | FillExecutionSubscribeMessage of IObserver<FillExecution>
+    | FillExecutionUnsubscribeMessage of IObserver<FillExecution>
     | PlaceMessage of MarketPlacement
     | FillMessage of FillExecution
 
 type MarketPlacementActor(_placement: MarketPlacement) = 
-    let subscribers = new HashSet<IObserver<DataChange<int, MarketPlacement>>>()
+    let marketPlacementSubscribers = new HashSet<IObserver<DataChange<int, MarketPlacement>>>()
+    let fillExecutionSubscribers = new HashSet<IObserver<FillExecution>>()
+    let fills = new ResizeArray<FillExecution>()
     let mutable placement = _placement
     
     let messageProcessor = MailboxProcessor.Start(fun inbox ->
@@ -23,21 +27,31 @@ type MarketPlacementActor(_placement: MarketPlacement) =
                 let! msg = inbox.Receive()
                 InboxWatcher.Watch(inbox)
                 match msg with
-                | SubscribeMessage sub -> 
-                    do subscribers.Add(sub) |> ignore
+                | MarketPlacementSubscribeMessage sub -> 
+                    do marketPlacementSubscribers.Add(sub) |> ignore
                     sub.OnNext(DataChange(placement.ID, placement, DataChangeType.Add))
-                | UnsubscribeMessage sub -> 
-                    do subscribers.Remove(sub) |> ignore                
-                | FillMessage fill ->                      
+                | MarketPlacementUnsubscribeMessage sub -> 
+                    do marketPlacementSubscribers.Remove(sub) |> ignore                
+                | FillExecutionSubscribeMessage sub -> 
+                    do fillExecutionSubscribers.Add(sub) |> ignore
+                    for fillExecution in fills
+                        do sub.OnNext(fillExecution)
+                | FillExecutionUnsubscribeMessage sub -> 
+                    do fillExecutionSubscribers.Remove(sub) |> ignore                
+                | FillMessage fill ->                     
+                    fills.Add(fill)
                     placement <- placement.Fill(fill)                    
-                    for sub in subscribers do sub.OnNext(DataChange(placement.ID, placement, DataChangeType.Update))
+                    for sub in marketPlacementSubscribers do sub.OnNext(DataChange(placement.ID, placement, DataChangeType.Update))
+                    for sub in fillExecutionSubscribers do sub.OnNext(fill)
                 do! loop()
             }
         loop()
     )
 
-    member this.Subscribe(sub) = messageProcessor.Post(SubscribeMessage(sub))
-    member this.Unsubscribe(sub) = messageProcessor.Post(UnsubscribeMessage(sub))
+    member this.Subscribe(sub) = messageProcessor.Post(MarketPlacementSubscribeMessage(sub))
+    member this.Unsubscribe(sub) = messageProcessor.Post(MarketPlacementUnsubscribeMessage(sub))
+    member this.Subscribe(sub) = messageProcessor.Post(FillExecutionSubscribeMessage(sub))
+    member this.Unsubscribe(sub) = messageProcessor.Post(FillExecutionUnsubscribeMessage(sub))
     member this.Place(placement) = messageProcessor.Post(PlaceMessage(placement))
     member this.ProcessFill(fill) = messageProcessor.Post(FillMessage(fill))
 
@@ -52,10 +66,10 @@ type MarketPlacementSupervisor() =
                 let! msg = inbox.Receive()
                 InboxWatcher.Watch(inbox)
                 match msg with
-                | SubscribeMessage sub -> 
+                | MarketPlacementSubscribeMessage sub -> 
                     for placementActor in placementActors.Values do placementActor.Subscribe(sub)                    
                     subscribers.Add(sub) |> ignore
-                | UnsubscribeMessage sub -> 
+                | MarketPlacementUnsubscribeMessage sub -> 
                     for placementActor in placementActors.Values do placementActor.Unsubscribe(sub)                    
                 | PlaceMessage mp ->                    
                     let mpa = new MarketPlacementActor(mp)
@@ -70,8 +84,10 @@ type MarketPlacementSupervisor() =
         loop()
     )
 
-    member this.Subscribe(sub) = messageProcessor.Post(SubscribeMessage(sub))
-    member this.Unsubscribe(sub) = messageProcessor.Post(UnsubscribeMessage(sub))
+    member this.Subscribe(sub) = messageProcessor.Post(MarketPlacementSubscribeMessage(sub))
+    member this.Unsubscribe(sub) = messageProcessor.Post(MarketPlacementUnsubscribeMessage(sub))
+    member this.Subscribe(sub) = messageProcessor.Post(FillExecutionSubscribeMessage(sub))
+    member this.Unsubscribe(sub) = messageProcessor.Post(FillExecutionUnsubscribeMessage(sub))
     member this.Place(placement) = messageProcessor.Post(PlaceMessage(placement))
     member this.ProcessFill(fill) = messageProcessor.Post(FillMessage(fill))
 

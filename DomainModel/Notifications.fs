@@ -17,6 +17,8 @@ type PlacementFilter(placementId: int) =
     member this.PlacementId = placementId
 
 type DataPublisher =     
-    abstract member Subscribe: DeskFilter -> IObserver<DataChange<int, MarketPlacement>> -> bool
+    abstract member SubscribeToPlacements: DeskFilter -> IObserver<DataChange<int, MarketPlacement>> -> bool
+    abstract member SubscribeToExecutions: DeskFilter -> IObserver<FillExecution> -> bool
+
     
 

@@ -5,7 +5,7 @@ using DomainModel;
 using Service;
 using Simulator;
 using System.Diagnostics;
-
+using UI;
 using UserInterface.ServiceReference1;
 
 namespace UserInterface {
@@ -19,7 +19,8 @@ namespace UserInterface {
             InitializeComponent();
             var dataContext = new UI.MainWindowDataContext(Dispatcher);
             WcfDataPublisher publisher = new WcfDataPublisher();
-            publisher.Subscribe(new Notifications.DeskFilter(66), dataContext);
+            publisher.SubscribeToPlacements(new Notifications.DeskFilter(66), new MarketPlacementObserver(dataContext));
+            publisher.SubscribeToExecutions(new Notifications.DeskFilter(66), new FillExecutionObserver(dataContext));
             DataContext = dataContext;
         }
     }

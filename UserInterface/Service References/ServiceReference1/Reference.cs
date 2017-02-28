@@ -20,13 +20,22 @@ namespace UserInterface.ServiceReference1 {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IPublisherService/SubscribeToMarketPlacements")]
         System.Threading.Tasks.Task SubscribeToMarketPlacementsAsync(int deskId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IPublisherService/SubscribeToFillExecutions")]
+        void SubscribeToFillExecutions(int deskId);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IPublisherService/SubscribeToFillExecutions")]
+        System.Threading.Tasks.Task SubscribeToFillExecutionsAsync(int deskId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public interface IPublisherServiceCallback {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IPublisherService/OnNext")]
-        void OnNext(System.Tuple<System.Tuple<int, int, decimal, decimal>, Notifications.DataChangeType>[] data);
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IPublisherService/OnNextExecution")]
+        void OnNextExecution(System.Tuple<int, decimal>[] data);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IPublisherService/OnNextMarketPlacment")]
+        void OnNextMarketPlacment(System.Tuple<System.Tuple<int, int, decimal, decimal>, Notifications.DataChangeType>[] data);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -63,6 +72,14 @@ namespace UserInterface.ServiceReference1 {
         
         public System.Threading.Tasks.Task SubscribeToMarketPlacementsAsync(int deskId) {
             return base.Channel.SubscribeToMarketPlacementsAsync(deskId);
+        }
+        
+        public void SubscribeToFillExecutions(int deskId) {
+            base.Channel.SubscribeToFillExecutions(deskId);
+        }
+        
+        public System.Threading.Tasks.Task SubscribeToFillExecutionsAsync(int deskId) {
+            return base.Channel.SubscribeToFillExecutionsAsync(deskId);
         }
     }
 }

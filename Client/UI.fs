@@ -10,7 +10,8 @@ open Notifications
 open System.Windows
 open Diagnostics
 
-type MarketPlacementViewModel(initialValue: MarketPlacement) =
+type MarketPlacementViewModel(initialValue: MarketPlacement) =    
+    let fills = ObservableCollection<FillExecution>()
     let mutable model = initialValue
     let propertyChanged = Event<_, _>()
     interface INotifyPropertyChanged with
@@ -20,6 +21,11 @@ type MarketPlacementViewModel(initialValue: MarketPlacement) =
     member this.ID with get() = model.ID
     member this.Quantity with get() = model.Quantity
     member this.Filled with get() = model.Filled
+
+    member this.FillRecieved(fillExecution) = 
+        fills.Add(fillExecution)
+    
+    member this.Fills = fills
 
     member this.UpdateFrom(newModel: MarketPlacement) = 
         let oldmodel = model
@@ -34,10 +40,10 @@ type MarketPlacementViewModel(initialValue: MarketPlacement) =
 
 
 type MainWindowDataContextActions = 
-    | OnNext of DataChange<int, MarketPlacement>
+    | MarketPlacementChanged of DataChange<int, MarketPlacement>
+    | FillReceived of FillExecution
 
-
-
+    
 type MainWindowDataContext (dispatcher: System.Windows.Threading.Dispatcher) =     
     let data = ObservableCollection<MarketPlacementViewModel>()
     let ViewModels = Dictionary<int, MarketPlacementViewModel>()
@@ -49,23 +55,41 @@ type MainWindowDataContext (dispatcher: System.Windows.Threading.Dispatcher) =
 
                 InboxWatcher.Watch(inbox)                
                 match msg with
-                    | MainWindowDataContextActions.OnNext value ->
-                        match ViewModels.TryGetValue(value.Key) with
-                        | true, vm -> dispatcher.Invoke(fun () -> vm.UpdateFrom(value.Data))
+                    | MarketPlacementChanged mpc ->
+                        match ViewModels.TryGetValue(mpc.Key) with
+                        | true, vm -> dispatcher.Invoke(fun () -> vm.UpdateFrom(mpc.Data))
                         | false, _ -> 
-                            let newVm = MarketPlacementViewModel(value.Data)
-                            ViewModels.Add(value.Key, newVm)
+                            let newVm = MarketPlacementViewModel(mpc.Data)
+                            ViewModels.Add(mpc.Key, newVm)
                             dispatcher.Invoke(fun () -> data.Add(newVm))
+                    | FillReceived fill ->
+                        match ViewModels.TryGetValue(fill.PlacementID) with
+                        | true, vm -> dispatcher.Invoke(fun () -> vm.FillRecieved(fill))
+                        | false, _ -> ignore // TODO, think about what happens if we get a fill before the order, what about unsolicited.
+
                 do! loop()
             }
         loop()        
     )
     
+    member this.PostMessage(message: MainWindowDataContextActions) = messageProcessor.Post(message)
+
     member this.MarketPlacements = data
 
+type MarketPlacementObserver(dataContext: MainWindowDataContext) =
+    
     interface IObserver<DataChange<int, MarketPlacement>> with 
         member this.OnNext(value: DataChange<int, MarketPlacement>) =                                                
-            messageProcessor.Post(OnNext(value))
+            dataContext.PostMessage(MarketPlacementChanged(value))
+        member this.OnError(error: Exception) =
+            raise (error)
+        member this.OnCompleted() =
+            raise (NotImplementedException())
+
+type FillExecutionObserver(dataContext: MainWindowDataContext) =
+    interface IObserver<FillExecution> with 
+        member this.OnNext(value: FillExecution) =                                                
+            dataContext.PostMessage(FillReceived(value))
         member this.OnError(error: Exception) =
             raise (error)
         member this.OnCompleted() =
