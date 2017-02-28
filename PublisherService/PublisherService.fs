@@ -25,7 +25,7 @@ type IClientMarketPlacementSubscriber =
 
 type IClientFillExecutionSubscriber =
     [<OperationContract(IsOneWay = true)>] // TODO is this line needed?
-    abstract member OnNext : data:(int * decimal) [] -> unit
+    abstract member OnNext : data:(int * decimal * decimal) [] -> unit
 
 [<Interface>]
 [<ServiceContract(CallbackContract = typedefof<IClientMarketPlacementSubscriber>)>] 
@@ -72,7 +72,7 @@ type MarketPlacementNotificationSender(clientSubscriber: IClientMarketPlacementS
 
 type FillExecutionNotificationSender(clientSubscriber: IClientFillExecutionSubscriber) =        
     let messageProcessor = MailboxProcessor.Start(fun inbox ->        
-        let sendThese = ResizeArray<int * decimal>()
+        let sendThese = ResizeArray<int * decimal * decimal>()
         let rec loop() = 
             async {        
                 let! msg = inbox.Receive()                

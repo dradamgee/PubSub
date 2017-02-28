@@ -6,9 +6,10 @@ open System.Collections.Generic
 open System.Runtime.Serialization
 open System.ServiceModel;
 
-type FillExecution(id: int, quantity: decimal) = 
+type FillExecution(id: int, quantity: decimal, cumQuantity: decimal) = 
     member this.PlacementID = id
     member this.Quantity = quantity
+    member this.CumQuantity = cumQuantity
 
 type MarketPlacement(id: int, deskId: int, quantity: decimal, filled: decimal) = 
     member this.ID = id

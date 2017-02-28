@@ -35,7 +35,8 @@ type SellSideSim(MarketPlacementSupervisor: MarketPlacementSupervisor) as self =
                         do placements.[value.Key] <- value.Data
                 | Tick ->                         
                     for placement in placements.Values do
-                        FillExecution(placement.ID, decimal(random.Next 10))                        
+                        let nextFillQty = 1m //decimal(random.Next 10)
+                        FillExecution(placement.ID, nextFillQty, nextFillQty + placement.Filled)                        
                         |> MarketPlacementSupervisor.ProcessFill
                 
                 do! loop()

@@ -7,8 +7,8 @@ open Simulator
 
 [<EntryPoint>]
 let main argv = 
-    let mmpp = MockMarketPlacementProvider(100.0)
-    do mmpp.MockUpSomeStuff(66, 10) |> ignore
+    let mmpp = MockMarketPlacementProvider(500.0)
+    do mmpp.MockUpSomeStuff(66, 100) |> ignore
     do mmpp.StartFilling()
     
     use serviceHost = new ServiceHost(PublisherService.MarketPlacementPublisherService mmpp.PlacementActor)

@@ -19,11 +19,26 @@
                 <TextBox Text="{Binding Filled, Mode=OneWay}"></TextBox>
             </StackPanel>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type domainModel:FillExecution}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Execution ID : "></TextBlock>
+                <TextBox Text="{Binding PlacementID, Mode=OneWay}"></TextBox>
+                <TextBlock Text="Quantity : "></TextBlock>
+                <TextBox Text="{Binding Quantity, Mode=OneWay}"></TextBox>
+                <TextBlock Text="Cum : "></TextBlock>
+                <TextBox Text="{Binding CumQuantity, Mode=OneWay}"></TextBox>
+            </StackPanel>
+        </DataTemplate>
     </Window.Resources>
-    <ScrollViewer >
-        <ItemsControl ItemsSource="{Binding MarketPlacements}">
-        </ItemsControl>
-    </ScrollViewer>
+    
+        <StackPanel Orientation="Horizontal">
+        <ScrollViewer>
+            <ListView SelectedItem="{Binding SelectItem}" ItemsSource="{Binding MarketPlacements}"/>
+        </ScrollViewer>
+        <ScrollViewer>
+            <ListView ItemsSource="{Binding SelectItem.Fills}"/>
+        </ScrollViewer>
+    </StackPanel>
     
     
 </Window>

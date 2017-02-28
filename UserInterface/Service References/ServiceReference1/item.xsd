@@ -11,7 +11,7 @@
   <xs:element name="OnNext">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="data" nillable="true" type="q1:ArrayOfTupleOfintdecimal" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="data" nillable="true" type="q1:ArrayOfTupleOfintdecimaldecimal" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -82,7 +82,8 @@ type MarketPlacementSupervisor() =
                     let mpa = new MarketPlacementActor(mp)
                     placementActors.Add(mp.ID, mpa)
                     for sub in subscribers do mpa.Subscribe(sub)
-                | FillMessage fill ->                      
+                | FillMessage fill ->
+                    do fills.Add(fill)    
                     let placementActor = placementActors.[fill.PlacementID]
                     do placementActor.ProcessFill(fill)
                     for sub in fillSubscribers do sub.OnNext(fill)                    

@@ -26,7 +26,7 @@ namespace UserInterface.ServiceReference1 {
     public interface IFillExecutionPublisherServiceCallback {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IFillExecutionPublisherService/OnNext")]
-        void OnNext(System.Tuple<int, decimal>[] data);
+        void OnNext(System.Tuple<int, decimal, decimal>[] data);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

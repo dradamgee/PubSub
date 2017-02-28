@@ -36,10 +36,10 @@ namespace UserInterface
             _fillExecutionObserver = fillExecutionObserver;
         }
 
-        public void OnNext(Tuple<int, decimal>[] data)
+        public void OnNext(Tuple<int, decimal, decimal>[] data)
         {
             foreach (var message in data) {
-                var fe = new FillExecution(message.Item1, message.Item2);
+                var fe = new FillExecution(message.Item1, message.Item2, message.Item3);
                 _fillExecutionObserver.OnNext(fe);
             }
         }

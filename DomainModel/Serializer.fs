@@ -14,6 +14,7 @@ type DomainSerializer =
     static member Serialize (fillExecution: FillExecution) = 
         (
         fillExecution.PlacementID,
-        fillExecution.Quantity
+        fillExecution.Quantity,
+        fillExecution.CumQuantity
         )
 

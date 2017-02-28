@@ -10,6 +10,7 @@ open Notifications
 open System.Windows
 open Diagnostics
 
+[<AllowNullLiteral>]
 type MarketPlacementViewModel(initialValue: MarketPlacement) =    
     let fills = ObservableCollection<FillExecution>()
     let mutable model = initialValue
@@ -23,7 +24,7 @@ type MarketPlacementViewModel(initialValue: MarketPlacement) =
     member this.Filled with get() = model.Filled
 
     member this.FillRecieved(fillExecution) = 
-        fills.Add(fillExecution)
+        fills.Insert(0, fillExecution)
     
     member this.Fills = fills
 
@@ -46,8 +47,9 @@ type MainWindowDataContextActions =
     
 type MainWindowDataContext (dispatcher: System.Windows.Threading.Dispatcher) =     
     let data = ObservableCollection<MarketPlacementViewModel>()
-    let ViewModels = Dictionary<int, MarketPlacementViewModel>()
-    
+    let ViewModels = Dictionary<int, MarketPlacementViewModel>()    
+    let mutable selectedItem : MarketPlacementViewModel = null
+                
     let messageProcessor = MailboxProcessor.Start(fun inbox ->
         let rec loop() = 
             async {
@@ -71,6 +73,18 @@ type MainWindowDataContext (dispatcher: System.Windows.Threading.Dispatcher) =
             }
         loop()        
     )
+
+    let propertyChanged = Event<_, _>()
+    interface INotifyPropertyChanged with
+        [<CLIEvent>]
+        member this.PropertyChanged = propertyChanged.Publish
+    member private this.OnPropertyChanged p = propertyChanged.Trigger(this, PropertyChangedEventArgs(p))
+
+    member this.SelectItem 
+        with get() = selectedItem 
+        and set newValue = 
+            do selectedItem <- newValue
+            this.OnPropertyChanged("SelectItem")
     
     member this.PostMessage(message: MainWindowDataContextActions) = messageProcessor.Post(message)
 
