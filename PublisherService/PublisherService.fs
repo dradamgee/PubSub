@@ -6,7 +6,7 @@ open Notifications
 open DomainModel
 open Simulator
 open Service
-open System.Diagnostics
+open Diagnostics
 
 [<Interface>]
 type IClientSubscriber =
@@ -31,7 +31,7 @@ type NotificationSender(clientSubscriber: IClientSubscriber) =
         let rec loop() = 
             async {        
                 let! msg = inbox.Receive()                
-                if inbox.CurrentQueueLength > 1000 then Debug.WriteLine("NotificationSender " + inbox.CurrentQueueLength.ToString())
+                InboxWatcher.Watch(inbox)
 
                 match msg with
                     | DataChanged dc ->

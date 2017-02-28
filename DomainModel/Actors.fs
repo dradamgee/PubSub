@@ -3,15 +3,16 @@
 open System.Timers
 open System
 open System.Collections.Generic
-open System.Diagnostics
 open DomainModel
 open Notifications
+open Diagnostics
     
 type MarketPlacementActorMessage =
     | SubscribeMessage of IObserver<DataChange<int, MarketPlacement>>
     | UnsubscribeMessage of IObserver<DataChange<int, MarketPlacement>>
     | PlaceMessage of MarketPlacement
     | FillMessage of FillExecution
+
 
 type MarketPlacementActor() = 
     let subscribers = new HashSet<IObserver<DataChange<int, MarketPlacement>>>()
@@ -21,7 +22,7 @@ type MarketPlacementActor() =
         let rec loop() = 
             async { 
                 let! msg = inbox.Receive()
-                if inbox.CurrentQueueLength > 1000 then Debug.WriteLine("MarketPlacementActor " + inbox.CurrentQueueLength.ToString())
+                InboxWatcher.Watch(inbox)
                 match msg with
                 | SubscribeMessage sub -> 
                     do subscribers.Add(sub) |> ignore
@@ -31,8 +32,7 @@ type MarketPlacementActor() =
                 | PlaceMessage mp -> 
                     placements.Add(mp.ID, mp)
                     for sub in subscribers do sub.OnNext(DataChange(mp.ID, mp, DataChangeType.Add))
-                | FillMessage fill -> 
-                    //Debug.WriteLine(fill.ToString() + DateTime.Now.ToString())
+                | FillMessage fill ->                     
                     let oldPlacement = placements.[fill.PlacementID]
                     let newPlacement = oldPlacement.Fill(fill)
                     placements.[fill.PlacementID] <- newPlacement

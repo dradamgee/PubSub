@@ -8,7 +8,7 @@ open DomainModel
 open Service
 open Notifications
 open System.Windows
-open System.Diagnostics
+open Diagnostics
 
 type MarketPlacementViewModel(initialValue: MarketPlacement) =
     let mutable model = initialValue
@@ -46,7 +46,8 @@ type MainWindowDataContext (dispatcher: System.Windows.Threading.Dispatcher) =
         let rec loop() = 
             async {
                 let! msg = inbox.Receive()                                
-                if inbox.CurrentQueueLength > 1000 then Debug.WriteLine("MainWindowDataContext " + inbox.CurrentQueueLength.ToString())
+
+                InboxWatcher.Watch(inbox)                
                 match msg with
                     | MainWindowDataContextActions.OnNext value ->
                         match ViewModels.TryGetValue(value.Key) with

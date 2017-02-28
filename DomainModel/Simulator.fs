@@ -6,13 +6,15 @@ open System.Collections.Generic
 open DomainModel
 open Service
 open Notifications
-open System.Diagnostics
+open Diagnostics
 
 type SellSideSimActions = 
     | OnNext of DataChange<int, MarketPlacement>
     | Tick    
 
 type SellSideSim(marketPlacementActor: MarketPlacementActor) as self =
+    
+
     let placements = Dictionary<int, MarketPlacement>()
     let random = Random()
     do marketPlacementActor.Subscribe(self)
@@ -21,7 +23,9 @@ type SellSideSim(marketPlacementActor: MarketPlacementActor) as self =
         let rec loop() = 
             async { 
                 let! msg = inbox.Receive()                                                
-                if inbox.CurrentQueueLength > 1000 then Debug.WriteLine("SellSideSim " + inbox.CurrentQueueLength.ToString())
+
+                InboxWatcher.Watch(inbox)
+                
                 match msg with
                 | OnNext value ->
                     match value.DataChangeType with

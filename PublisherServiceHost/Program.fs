@@ -7,7 +7,7 @@ open Simulator
 
 [<EntryPoint>]
 let main argv = 
-    let mmpp = MockMarketPlacementProvider(1.0)
+    let mmpp = MockMarketPlacementProvider(35.0)
     do mmpp.MockUpSomeStuff(66, 100) |> ignore
     do mmpp.StartFilling()
 
