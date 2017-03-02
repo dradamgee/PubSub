@@ -2,6 +2,8 @@
 
 open System
 open DomainModel
+open System.IO
+open System.Runtime.Serialization.Formatters.Binary
 
 type DataChangeType = Add | Update | Delete    
 
@@ -20,5 +22,13 @@ type DataPublisher =
     abstract member SubscribeToPlacements: DeskFilter -> IObserver<DataChange<int, MarketPlacement>> -> bool
     abstract member SubscribeToExecutions: DeskFilter -> IObserver<FillExecution> -> bool
 
-    
-
+type BinarySerializer = 
+    static member Serialize(value: obj) = 
+        use stream = new MemoryStream()
+        let formatter = new BinaryFormatter()
+        do formatter.Serialize(stream, value)
+        stream.ToArray()
+    static member Deserialize(message: byte[]) =
+        use stream = new MemoryStream(message)
+        let formatter = new BinaryFormatter()
+        formatter.Deserialize(stream)

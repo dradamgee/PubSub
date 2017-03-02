@@ -162,6 +162,10 @@
       <Project>{738476C7-8837-496B-B0FF-8B7CFE76087A}</Project>
       <Name>DomainModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RmqPublisherClient\RmqPublisherClient.fsproj">
+      <Project>{d2781573-3d46-40b1-8812-396db8eed155}</Project>
+      <Name>RmqPublisherClient</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

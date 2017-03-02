@@ -18,7 +18,10 @@ namespace UserInterface {
         public MainWindow() {
             InitializeComponent();
             var dataContext = new UI.MainWindowDataContext(Dispatcher);
-            WcfDataPublisher publisher = new WcfDataPublisher();
+
+            //Notifications.DataPublisher publisher = new WcfDataPublisher();
+            Notifications.DataPublisher publisher = new RmqPublisherClient.PublisherClient(Guid.NewGuid().ToString());
+            
             publisher.SubscribeToPlacements(new Notifications.DeskFilter(66), new MarketPlacementObserver(dataContext));
             publisher.SubscribeToExecutions(new Notifications.DeskFilter(66), new FillExecutionObserver(dataContext));
             DataContext = dataContext;
